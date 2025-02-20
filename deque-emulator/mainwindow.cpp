@@ -206,11 +206,11 @@ void MainWindow::on_btn_sort_clicked() {
 }
 
 void MainWindow::on_btn_sort_2_clicked() {
-    deque_model_.items = MergeSort(deque_model_.items, [](const std::string& lhs, const std::string& rhs) {
-        return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), [](char a, char b) {
-            return std::tolower(a) < std::tolower(b);
-        });
-    });
+    static const auto compare_ci = [](const std::string& l, const std::string& r) {
+        return QString::compare(QString::fromStdString(l), QString::fromStdString(r), Qt::CaseInsensitive) < 0;
+    };
+
+    deque_model_.items = MergeSort(deque_model_.items, compare_ci);
     deque_model_.iterator = deque_model_.items.begin();
 
     ApplyModel();
